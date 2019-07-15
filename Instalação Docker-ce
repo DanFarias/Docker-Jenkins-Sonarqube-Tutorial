@@ -1,0 +1,106 @@
+Docker-ce e docker compose instalação
+Instalar usando o repositório
+Antes de instalar o Docker CE pela primeira vez em uma nova máquina host, você precisa configurar o repositório do Docker. Depois, você pode instalar e atualizar o Docker do repositório.
+
+Obs: Caso seu sistema seja CentOS ou outro sistema que utiliza um gerenciador de pacote diferente, click no link  que utilizei como referencia  vai ter um menu no painel na lateral do site que tem a opção de escolher a distro da instalação.
+
+CONFIGURAR O REPOSITÓRIO
+	1. Primeiramente vamos atualizar o repositório do ubuntu:
+	$ sudo  apt-get update
+	2. Instalar pacotes para permitir apt um repositório via HTTPS:
+	$  sudo apt-get install \
+	    apt-transport-https \
+	    ca-certificates \
+	    curl \
+	    gnupg-agent \
+	    software-properties-common
+	
+	3. Adicionar chave GPG oficial do Docker:
+	Caso não tenha o curl instale com comando : sudo apt-get install curl
+	
+
+	$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	
+	Verifique se você tem agora a chave com a impressão digital 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88, procurando os últimos 8 caracteres da impressão digital.
+
+   $  sudo apt-key fingerprint 0EBFCD88
+
+	Vai aparecer algo assim:
+	
+	pub   rsa4096 2017-02-22 [SCEA]
+	      9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+	uid           [ unknown] Docker Release (CE deb) <docker@docker.com>
+	sub   rsa4096 2017-02-22 [S]
+	
+
+	Use o seguinte comando para configurar o repositório estável . Para adicionar o repositório noturno ou de teste , adicione a palavra nightly ou test (ou ambos) após a palavra stable nos comandos abaixo. Aprenda sobre os canais noturnos e de teste .
+Nota : O lsb_release -cs subcomando abaixo retorna o nome da sua distribuição do Ubuntu, como xenial. Às vezes, em uma distribuição como o Linux Mint, você pode precisar mudar $(lsb_release -cs) para a distribuição do seu pai no Ubuntu. Por exemplo, se você estiver usando Linux Mint Tessa, você pode usar bionic. O Docker não oferece nenhuma garantia em distribuições do Ubuntu não testadas e não suportadas.
+	Aqui eu gosto de colocar um de cada vez as vezes o ato de copiar e colar não vai correto e termina atrapalhando o processo:
+	
+	$  sudo add-apt-repository \
+	   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+	   $(lsb_release -cs) \
+	   stable"
+	
+	INSTALE O DOCKER CE
+		1. Atualize o repositório :
+		$ sudo apt-get update
+		2. Instale a versão mais recente do Docker CE e o containerd ou vá para a próxima etapa para instalar uma versão específica eu gosto de fazer a instalação especifica :
+		$  sudo apt-get install docker-ce docker-ce-cli containerd.io
+		3. Para instalar uma versão específica do Docker CE, liste as versões disponíveis no repositório, selecione e instale:
+		4. $  apt-cache madison docker-ce
+		
+		Irar aparecer uma listar as versões disponíveis no  repositório  e quero dar  uma pequena dica o docker-compose 3,7 só funciona com a versão do docker 18.06.0+ :
+		 docker-ce | 5:18.09.7~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.6~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.5~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.4~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.3~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.2~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.1~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 5:18.09.0~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 18.06.3~ce~3-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 18.06.2~ce~3-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 18.06.1~ce~3-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 18.06.0~ce~3-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 18.03.1~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 18.03.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.12.1~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.12.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.09.1~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.09.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.06.2~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.06.1~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		 docker-ce | 17.06.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+		
+		5.  Instale uma versão específica usando a string de versão da segunda coluna, por exemplo 5:18.09.1~3-0~ubuntu-xenial.
+		
+		$ sudo apt-get install docker-ce= VERSION_STRING
+		Exemplo:  sudo apt-get install docker-ce=18.06.3~ce~3-0~ubuntu
+		
+		6. Verifique se o Docker CE está instalado corretamente, executando a hello-world imagem.
+		
+		$ sudo docker run hello-world
+		
+		Esse comando faz o download de uma imagem de teste e a executa em um contêiner. Quando o contêiner é executado, ele imprime uma mensagem informativa e sai.
+		Caso queira ver a imagem é só dar o comando docker imagens e para ver o container docker  ps -a
+	O Docker CE está instalado e em execução. O docker grupo é criado, mas nenhum usuário é adicionado a ele. Você precisa usar sudo para executar os comandos do Docker ou dar os comando como root.
+	Caso queira dar os comandos  sem ser como root tem que adicionar o usuário ao grupo do docker possa ser que acontece do grupo não ser criado abaixo estará os comandos para criar o grupo e para adicionar o usuário.
+	
+	Aqui se cria o grupo:
+  
+	$ sudo groupadd docker
+	
+	Aqui adiciona o usurio ao grupo:
+	
+	$  sudo usermod -aG docker $USER
+	
+  Instalando docker compose:
+  
+  curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+	
+	Utilizei os dados da documentação caso queira seguir por ela aqui está o link:
+	
+	https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
+	
